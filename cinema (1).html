@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Une invitation spéciale 🎬</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #fff0f4 0%, #fce4ec 50%, #fdf6f8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Sans', sans-serif;
+      overflow: hidden;
+    }
+
+    /* Petits coeurs flottants en fond */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .heart-particle {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0;
+      animation: floatUp var(--d) var(--delay) infinite;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(0) scale(0.8); }
+      20%  { opacity: 0.25; }
+      80%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-120px) scale(1.1); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      border: 1.5px solid #f8c8d4;
+      border-radius: 28px;
+      padding: 3rem 2.5rem 2.5rem;
+      max-width: 460px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(236, 100, 140, 0.12);
+    }
+
+    .ticket-top {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e05c8a;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #f4a0bc;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 32px;
+      color: #2d1a22;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .sub {
+      font-size: 15px;
+      color: #a07080;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .film-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff0f4;
+      border: 1px solid #f8c8d4;
+      border-radius: 100px;
+      padding: 8px 18px;
+      font-size: 14px;
+      color: #c05070;
+      margin-bottom: 2.5rem;
+    }
+
+    .btn-zone {
+      position: relative;
+      width: 100%;
+      height: 130px;
+    }
+
+    .btn {
+      padding: 13px 30px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.1s, filter 0.15s;
+      border: none;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    #btn-oui {
+      background: #22c55e;
+      color: #fff;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+    }
+    #btn-oui:hover { filter: brightness(1.08); }
+
+    #btn-non {
+      background: #ef4444;
+      color: #fff;
+      position: absolute;
+      white-space: nowrap;
+      transition: none;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+    }
+    #btn-non:hover { filter: brightness(1.08); }
+
+    .divider {
+      border: none;
+      border-top: 1.5px dashed #f8c8d4;
+      margin: 2rem 0 1.5rem;
+    }
+
+    .footer {
+      font-size: 12px;
+      color: #d4a0b0;
+      letter-spacing: 0.06em;
+    }
+
+    /* Result screen */
+    .result {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .result-emoji { font-size: 64px; line-height: 1; }
+    .result h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: #2d1a22;
+    }
+    .result p { font-size: 15px; color: #a07080; }
+
+    #btn-reset {
+      margin-top: 0.5rem;
+      padding: 10px 24px;
+      border-radius: 100px;
+      background: transparent;
+      color: #c05070;
+      border: 1.5px solid #f8c8d4;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    #btn-reset:hover { background: #fff0f4; }
+  </style>
+</head>
+<body>
+
+  <div class="hearts-bg" id="hearts-bg"></div>
+
+  <div class="card">
+    <div id="main-content">
+      <div class="ticket-top">
+        <div class="dot"></div>
+        Invitation personnelle
+        <div class="dot"></div>
+      </div>
+
+      <h1>Tu veux aller au cinéma avec moi ?</h1>
+      <p class="sub">On choisirait le film ensemble, et les popcorns aussi.</p>
+
+      <div class="film-badge">
+        🎬 À toi de choisir le film
+      </div>
+
+      <div class="btn-zone" id="btn-zone">
+        <button class="btn" id="btn-oui" onclick="repondreOui()">Oui, j'adorerais ! 🎟️</button>
+        <button class="btn" id="btn-non">Non merci</button>
+      </div>
+
+      <hr class="divider" />
+      <p class="footer">Cette invitation expire quand tu dis oui ✦</p>
+    </div>
+
+    <div class="result" id="result-oui">
+      <div class="result-emoji">🎉</div>
+      <h2>Elle a dit oui !</h2>
+      <p>Plus qu'à choisir le film... et les popcorns !</p>
+      <button id="btn-reset" onclick="reset()">Recommencer</button>
+    </div>
+  </div>
+
+  <script>
+    // Coeurs flottants
+    const hBg = document.getElementById('hearts-bg');
+    const emojis = ['🌸','💕','🎀','💗','✨','🌷'];
+    for (let i = 0; i < 30; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart-particle';
+      h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      h.style.cssText = `left:${Math.random()*100}%;top:${40+Math.random()*60}%;--d:${4+Math.random()*5}s;--delay:${Math.random()*6}s`;
+      hBg.appendChild(h);
+    }
+
+    const btnNon = document.getElementById('btn-non');
+    const btnOui = document.getElementById('btn-oui');
+    const zone   = document.getElementById('btn-zone');
+    const resultOui = document.getElementById('result-oui');
+    const mainContent = document.getElementById('main-content');
+
+    let noCount = 0;
+    const messages = ['Non merci','Pas vraiment...','Je ne crois pas...','Hmm non...','Tu es sûre ?','Vraiment non ?','Pense-y encore !','Allez, juste un film !','Dernière chance...'];
+
+    function placeNon() {
+      const zW = zone.offsetWidth;
+      const zH = zone.offsetHeight;
+      const bW = btnNon.offsetWidth  || 110;
+      const bH = btnNon.offsetHeight || 46;
+      const oL = btnOui.offsetLeft;
+      const oR = oL + btnOui.offsetWidth;
+      const oT = btnOui.offsetTop;
+      const oB = oT + btnOui.offsetHeight;
+      let x, y, tries = 0;
+      do {
+        x = Math.random() * (zW - bW);
+        y = Math.random() * (zH - bH);
+        tries++;
+      } while (tries < 40 && x < oR + 10 && x + bW > oL - 10 && y < oB + 10 && y + bH > oT - 10);
+      btnNon.style.left = x + 'px';
+      btnNon.style.top  = y + 'px';
+    }
+
+    function initNon() {
+      btnNon.style.position = 'absolute';
+      btnNon.style.left = (btnOui.offsetLeft + btnOui.offsetWidth + 20) + 'px';
+      btnNon.style.top  = btnOui.offsetTop + 'px';
+    }
+
+    btnNon.addEventListener('mouseover', () => {
+      noCount++;
+      btnNon.textContent = messages[Math.min(noCount, messages.length - 1)];
+      placeNon();
+    });
+    btnNon.addEventListener('click', () => placeNon());
+
+    function repondreOui() {
+      mainContent.style.display = 'none';
+      resultOui.style.display = 'flex';
+    }
+
+    function reset() {
+      mainContent.style.display = '';
+      resultOui.style.display = 'none';
+      noCount = 0;
+      btnNon.textContent = 'Non merci';
+      setTimeout(initNon, 60);
+    }
+
+    window.addEventListener('load', () => setTimeout(initNon, 80));
+  </script>
+</body>
+</html>
